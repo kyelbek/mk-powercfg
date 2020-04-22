@@ -9,7 +9,7 @@ namespace mk_powercfg
 {
     public static class ExtMethods
     {
-        private static string ExeCMD(string exeargs)
+        private static string PowerCFG(string exeargs)
         {
             string output = null;
             try
@@ -42,18 +42,13 @@ namespace mk_powercfg
         }
         public static string GetActiveScheme()
         {
-            var response = ExeCMD("/getactivescheme");
+            var response = PowerCFG("/getactivescheme");
             return response;
         }
         public static string GetSchemes()
         {
-            var response = ExeCMD("/list");
+            var response = PowerCFG("/list");
             return response;
-        }
-
-        public static void NewLine(string obj)
-        {
-            //obj.Text
         }
     }
 

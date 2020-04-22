@@ -60,6 +60,7 @@
             this.btn_apply.TabIndex = 0;
             this.btn_apply.Text = "Apply";
             this.btn_apply.UseVisualStyleBackColor = true;
+            this.btn_apply.Click += new System.EventHandler(this.btn_apply_Click);
             // 
             // cmb_profile
             // 
@@ -68,6 +69,7 @@
             this.cmb_profile.Name = "cmb_profile";
             this.cmb_profile.Size = new System.Drawing.Size(146, 21);
             this.cmb_profile.TabIndex = 1;
+            this.cmb_profile.SelectedIndexChanged += new System.EventHandler(this.cmb_profile_SelectedIndexChanged);
             // 
             // chkbx_startup
             // 
@@ -78,6 +80,7 @@
             this.chkbx_startup.TabIndex = 2;
             this.chkbx_startup.Text = "Start with Windows";
             this.chkbx_startup.UseVisualStyleBackColor = true;
+            this.chkbx_startup.CheckedChanged += new System.EventHandler(this.chkbx_startup_CheckedChanged);
             // 
             // trb_maxcap
             // 
@@ -101,6 +104,7 @@
             this.btn_cancel.TabIndex = 5;
             this.btn_cancel.Text = "Cancel";
             this.btn_cancel.UseVisualStyleBackColor = true;
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
             // btn_ok
             // 
@@ -110,10 +114,11 @@
             this.btn_ok.TabIndex = 6;
             this.btn_ok.Text = "OK";
             this.btn_ok.UseVisualStyleBackColor = true;
+            this.btn_ok.Click += new System.EventHandler(this.btn_ok_Click);
             // 
             // tbx_log
             // 
-            this.tbx_log.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.tbx_log.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.tbx_log.Location = new System.Drawing.Point(12, 12);
             this.tbx_log.Multiline = true;
             this.tbx_log.Name = "tbx_log";
@@ -154,6 +159,11 @@
             // updn_screen
             // 
             this.updn_screen.Location = new System.Drawing.Point(642, 61);
+            this.updn_screen.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
             this.updn_screen.Name = "updn_screen";
             this.updn_screen.Size = new System.Drawing.Size(48, 20);
             this.updn_screen.TabIndex = 15;
@@ -162,10 +172,16 @@
             0,
             0,
             0});
+            this.updn_screen.ValueChanged += new System.EventHandler(this.updn_screen_ValueChanged);
             // 
             // updn_sleep
             // 
             this.updn_sleep.Location = new System.Drawing.Point(642, 85);
+            this.updn_sleep.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
             this.updn_sleep.Name = "updn_sleep";
             this.updn_sleep.Size = new System.Drawing.Size(48, 20);
             this.updn_sleep.TabIndex = 16;
@@ -174,6 +190,7 @@
             0,
             0,
             0});
+            this.updn_sleep.ValueChanged += new System.EventHandler(this.updn_sleep_ValueChanged);
             // 
             // lbl_maxcap
             // 
@@ -243,7 +260,9 @@
             this.Controls.Add(this.chkbx_startup);
             this.Controls.Add(this.cmb_profile);
             this.Controls.Add(this.btn_apply);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Main";
             this.Text = "Power Manager";
             this.Load += new System.EventHandler(this.Main_Load);
