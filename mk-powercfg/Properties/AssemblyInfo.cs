@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // zestaw atrybutów. Zmień wartości tych atrybutów, aby zmodyfikować informacje
 // powiązane z zestawem.
 [assembly: AssemblyTitle("mk-powercfg")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Power Management interface for PowerCFG utility")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("RMD Corporation")]
 [assembly: AssemblyProduct("mk-powercfg")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Możesz określić wszystkie wartości lub użyć domyślnych numerów kompilacji i poprawki
 // przy użyciu symbolu „*”, tak jak pokazano poniżej:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.0.0.1")]
+[assembly: AssemblyFileVersion("0.0.0.1")]

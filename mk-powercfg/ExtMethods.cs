@@ -31,6 +31,7 @@ namespace mk_powercfg
                 {
                     output += powercfg.StandardOutput.ReadLine();
                     output += Environment.NewLine;
+                    //output += "...";
                 }
                 powercfg.WaitForExit();
             }
@@ -49,6 +50,27 @@ namespace mk_powercfg
         {
             var response = PowerCFG("/list");
             return response;
+        }
+        public static int CountLines(string str)
+        {
+            if (str == null)
+                throw new ArgumentNullException("str");
+            if (str == string.Empty)
+                return 0;
+            int index = -1;
+            int count = 0;
+            while (-1 != (index = str.IndexOf(Environment.NewLine, index + 1)))
+                count++;
+            return count + 1;
+        }
+        public static int Count4(string s)
+        {
+            int n = 0;
+            foreach (var c in s)
+            {
+                if (c == '\n') n++;
+            }
+            return n + 1;
         }
     }
 

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,6 +12,14 @@ namespace mk_powercfg
 {
     public partial class Main : Form
     {
+        public class SchemeParts
+        {
+            public int[] number;
+            public string[] GUID;
+            public string[] Name;
+            public string SchemeList = null;
+        }
+
         public class Vars
         {
             public int MaxCap = 20;
@@ -19,7 +27,8 @@ namespace mk_powercfg
             public int SleepAfter;
             public int ScreenOff;
         }
-        Vars xvar = new Vars();
+
+        readonly Vars xvar = new Vars();
 
         #region > Init
         //private ContextMenuStrip traycontext;
@@ -30,9 +39,11 @@ namespace mk_powercfg
         }
         private void Main_Load(object sender, EventArgs e)
         {
+            AutoTrigger();
             //notifyIcon.ContextMenuStrip = traycontext;
-            tbx_log.Text += ExtMethods.GetSchemes();
-            tbx_log.Text += ExtMethods.GetActiveScheme();
+            //tbx_log.Text += ExtMethods.GetSchemes();
+            //tbx_log.Text += Environment.NewLine;
+            //tbx_log.Text += ExtMethods.GetActiveScheme();
             EnableSafeLimits();
             notifyIcon.BalloonTipText = "Application Minimized.";
             notifyIcon.BalloonTipTitle = "Power Manager";
@@ -44,6 +55,10 @@ namespace mk_powercfg
         {
             SetVars();
             RefreshUI();
+            //tbx_log.Text += "Max cap:" + Convert.ToString(xvar.MaxCap) + Environment.NewLine;
+            //tbx_log.Text += "Min cap:" + Convert.ToString(xvar.MinCap) + Environment.NewLine;
+            //tbx_log.Text += "Screen:" + Convert.ToString(xvar.ScreenOff) + Environment.NewLine;
+            //tbx_log.Text += "Sleep:" + Convert.ToString(xvar.SleepAfter) + Environment.NewLine;
         }
         private void Main_FormClosing(object sender, CancelEventArgs e)
         {
@@ -88,7 +103,8 @@ namespace mk_powercfg
         }
         private void btn_settings_Click(object sender, EventArgs e)
         {
-            tbx_log.Text += ExtMethods.GetSchemes();
+            //string GUIDrx = @"(\w{8}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{12})";
+            //string tmpSCHEMErx = @"(\x28)[^*]\D+(\x29)";
         }
         private void updn_screen_ValueChanged(object sender, EventArgs e)
         {
@@ -104,7 +120,7 @@ namespace mk_powercfg
         }
         private void btn_ok_Click(object sender, EventArgs e)
         {
-
+            Gex();
         }
         private void btn_cancel_Click(object sender, EventArgs e)
         {
@@ -117,31 +133,31 @@ namespace mk_powercfg
         #endregion
 
         #region > Main form methods
-        public void DisableSafeLimits()
+        private void DisableSafeLimits()
         {
             trb_maxcap.Minimum = 0;
             SetVars();
             RefreshUI();
         }
-        public void EnableSafeLimits()
+        private void EnableSafeLimits()
         {
             trb_maxcap.Minimum = 20;
-            trb_maxcap.Value = 20;
+            if (trb_maxcap.Value < 20) { trb_maxcap.Value = 20; }
             xvar.MaxCap = 20;
             SetVars();
             RefreshUI();
         }
-        public void RefreshUI()
+        private void RefreshUI()
         {
             lbl_maxcap.Text = Convert.ToString(xvar.MaxCap) + "%";
             trb_maxcap.Value = xvar.MaxCap;
         }
-        public void SetVars()
+        private void SetVars()
         {
             xvar.MaxCap = trb_maxcap.Value;
             xvar.MinCap = 5;
-            xvar.ScreenOff = updn_screen.Value;
-            xvar.SleepAfter = updn_;
+            xvar.ScreenOff = Convert.ToInt32(updn_screen.Value);
+            xvar.SleepAfter = Convert.ToInt32(updn_sleep.Value);
         }
         private void ExitApp()
         {
@@ -150,5 +166,49 @@ namespace mk_powercfg
             Application.Exit();
         }
         #endregion
-    }
+
+        #region >-----> Test func collections
+        public void AutoTrigger()
+        {
+            DebugPrints();
+        }
+
+        public void ManualTrigger()
+        {
+            Gex();
+        }
+
+
+        public void DebugPrints()
+        {
+            Console.WriteLine("Console output initialized...");
+        }
+        public void Gex()
+        {
+            SchemeParts SchemeTab = new SchemeParts();
+            Regex SchemeRX = new Regex(@"(\w{8}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{12})|\x28([^*]\D+)\x29");
+            string SchemeRXs = @"(\w{8}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{12})|\x28([^*]\D+)\x29";
+            SchemeTab.SchemeList = ExtMethods.GetSchemes();
+            //MatchCollection SchemeCollection = SchemeRX.Matches(SchemeTab.SchemeList,RegexOptions.Multiline);
+            MatchCollection SchemeCollection = Regex.Matches(SchemeTab.SchemeList, SchemeRXs,RegexOptions.IgnorePatternWhitespace);
+
+            Console.WriteLine("{0} matches found in:\n   {1}",
+                          SchemeCollection.Count,
+                          SchemeTab.SchemeList);
+
+            foreach (Match match in SchemeCollection)
+            {
+                GroupCollection groups = match.Groups;
+                Console.WriteLine("'{0}' repeated at positions {1} and {2}",
+                                      groups["word"].Value,
+                                      groups[0].Index,
+                                      groups[1].Index);
+            }
+
+            //Console.WriteLine("SchemeList:");
+            //Console.WriteLine(SchemeTab.SchemeList);
+            Console.WriteLine("Gex ended.");
+        }
+    #endregion
+}
 }
