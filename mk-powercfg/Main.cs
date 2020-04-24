@@ -178,36 +178,27 @@ namespace mk_powercfg
             Gex();
         }
 
-
-        public void DebugPrints()
-        {
-            Console.WriteLine("Console output initialized...");
-        }
         public void Gex()
         {
             SchemeParts SchemeTab = new SchemeParts();
-            Regex SchemeRX = new Regex(@"(\w{8}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{12})|\x28([^*]\D+)\x29");
-            string SchemeRXs = @"(\w{8}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{12})|\x28([^*]\D+)\x29";
+            Regex SchemeRX = new Regex(@"\w{8}\x2d\w{4}\x2d\w{4}\x2d\w{4}\x2d\w{12}|\x28([^*].+)\x29");
             SchemeTab.SchemeList = ExtMethods.GetSchemes();
-            //MatchCollection SchemeCollection = SchemeRX.Matches(SchemeTab.SchemeList,RegexOptions.Multiline);
-            MatchCollection SchemeCollection = Regex.Matches(SchemeTab.SchemeList, SchemeRXs,RegexOptions.IgnorePatternWhitespace);
-
-            Console.WriteLine("{0} matches found in:\n   {1}",
-                          SchemeCollection.Count,
-                          SchemeTab.SchemeList);
-
-            foreach (Match match in SchemeCollection)
+            MatchCollection SchemeCollection = SchemeRX.Matches(SchemeTab.SchemeList);
+            int item = 0;
+            string[,] SchemeList = new string[SchemeCollection.Count / 2, 4];
+            for (int row = 0; row < SchemeCollection.Count / 2; row++)
             {
-                GroupCollection groups = match.Groups;
-                Console.WriteLine("'{0}' repeated at positions {1} and {2}",
-                                      groups["word"].Value,
-                                      groups[0].Index,
-                                      groups[1].Index);
+                for (int col = 0; col <= 2; col += 2)
+                {
+                    SchemeList[row, col] = SchemeCollection[item].Groups[0].Value;
+                    SchemeList[row, col + 1] = SchemeCollection[item].Groups[1].Value;
+                    item++;
+                }
             }
-
-            //Console.WriteLine("SchemeList:");
-            //Console.WriteLine(SchemeTab.SchemeList);
-            Console.WriteLine("Gex ended.");
+        }
+        public void DebugPrints()
+        {
+            Console.WriteLine("Console output initialized...");
         }
     #endregion
 }
