@@ -31,7 +31,6 @@ namespace mk_powercfg
                 {
                     output += powercfg.StandardOutput.ReadLine();
                     output += Environment.NewLine;
-                    //output += "...";
                 }
                 powercfg.WaitForExit();
             }

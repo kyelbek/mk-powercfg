@@ -18,6 +18,7 @@ namespace mk_powercfg
             public string[] GUID;
             public string[] Name;
             public string SchemeList = null;
+            public string[,] SchemeMatrix = null;
         }
 
         public class Vars
@@ -39,11 +40,8 @@ namespace mk_powercfg
         }
         private void Main_Load(object sender, EventArgs e)
         {
+            tbx_log.Text += ExtMethods.GetSchemes();
             AutoTrigger();
-            //notifyIcon.ContextMenuStrip = traycontext;
-            //tbx_log.Text += ExtMethods.GetSchemes();
-            //tbx_log.Text += Environment.NewLine;
-            //tbx_log.Text += ExtMethods.GetActiveScheme();
             EnableSafeLimits();
             notifyIcon.BalloonTipText = "Application Minimized.";
             notifyIcon.BalloonTipTitle = "Power Manager";
@@ -55,10 +53,6 @@ namespace mk_powercfg
         {
             SetVars();
             RefreshUI();
-            //tbx_log.Text += "Max cap:" + Convert.ToString(xvar.MaxCap) + Environment.NewLine;
-            //tbx_log.Text += "Min cap:" + Convert.ToString(xvar.MinCap) + Environment.NewLine;
-            //tbx_log.Text += "Screen:" + Convert.ToString(xvar.ScreenOff) + Environment.NewLine;
-            //tbx_log.Text += "Sleep:" + Convert.ToString(xvar.SleepAfter) + Environment.NewLine;
         }
         private void Main_FormClosing(object sender, CancelEventArgs e)
         {
@@ -103,8 +97,7 @@ namespace mk_powercfg
         }
         private void btn_settings_Click(object sender, EventArgs e)
         {
-            //string GUIDrx = @"(\w{8}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{4}\x2d)(\w{12})";
-            //string tmpSCHEMErx = @"(\x28)[^*]\D+(\x29)";
+            Lul();
         }
         private void updn_screen_ValueChanged(object sender, EventArgs e)
         {
@@ -120,7 +113,6 @@ namespace mk_powercfg
         }
         private void btn_ok_Click(object sender, EventArgs e)
         {
-            Gex();
         }
         private void btn_cancel_Click(object sender, EventArgs e)
         {
@@ -159,6 +151,25 @@ namespace mk_powercfg
             xvar.ScreenOff = Convert.ToInt32(updn_screen.Value);
             xvar.SleepAfter = Convert.ToInt32(updn_sleep.Value);
         }
+        private void Gex()
+        {
+            SchemeParts SchemeTab = new SchemeParts();
+            Regex SchemeRX = new Regex(@"\w{8}\x2d\w{4}\x2d\w{4}\x2d\w{4}\x2d\w{12}|\x28([^*].+)\x29");
+            SchemeTab.SchemeList = ExtMethods.GetSchemes();
+            MatchCollection SchemeCollection = SchemeRX.Matches(SchemeTab.SchemeList);
+            int item = 0;
+            string[,] matrix = new string[SchemeCollection.Count / 2, 4];
+            for (int row = 0; row < SchemeCollection.Count / 2; row++)
+            {
+                for (int col = 0; col <= 2; col += 2)
+                {
+                    matrix[row, col] = SchemeCollection[item].Groups[0].Value;
+                    matrix[row, col + 1] = SchemeCollection[item].Groups[1].Value;
+                    item++;
+                }
+            }
+            SchemeTab.SchemeMatrix = matrix;
+        }
         private void ExitApp()
         {
             notifyIcon.Dispose();
@@ -171,35 +182,28 @@ namespace mk_powercfg
         public void AutoTrigger()
         {
             DebugPrints();
+            Gex();
         }
 
         public void ManualTrigger()
         {
-            Gex();
-        }
-
-        public void Gex()
-        {
-            SchemeParts SchemeTab = new SchemeParts();
-            Regex SchemeRX = new Regex(@"\w{8}\x2d\w{4}\x2d\w{4}\x2d\w{4}\x2d\w{12}|\x28([^*].+)\x29");
-            SchemeTab.SchemeList = ExtMethods.GetSchemes();
-            MatchCollection SchemeCollection = SchemeRX.Matches(SchemeTab.SchemeList);
-            int item = 0;
-            string[,] SchemeList = new string[SchemeCollection.Count / 2, 4];
-            for (int row = 0; row < SchemeCollection.Count / 2; row++)
-            {
-                for (int col = 0; col <= 2; col += 2)
-                {
-                    SchemeList[row, col] = SchemeCollection[item].Groups[0].Value;
-                    SchemeList[row, col + 1] = SchemeCollection[item].Groups[1].Value;
-                    item++;
-                }
-            }
         }
         public void DebugPrints()
         {
             Console.WriteLine("Console output initialized...");
         }
-    #endregion
-}
+        public static bool CheckAppSchemeExistence()
+        {
+            Boolean x = false;
+
+            return x;
+        }
+
+        public void Lul()
+        {
+            SchemeParts SchemeTab = new SchemeParts();
+            Console.WriteLine(SchemeTab.SchemeMatrix[0, 0]);
+        }
+        #endregion
+    }
 }

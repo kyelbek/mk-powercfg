@@ -47,6 +47,7 @@
             this.btn_settings = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.chkbx_safe = new System.Windows.Forms.CheckBox();
+            this.btn_personalprofile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trb_maxcap)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.updn_screen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.updn_sleep)).BeginInit();
@@ -239,11 +240,20 @@
             this.chkbx_safe.UseVisualStyleBackColor = true;
             this.chkbx_safe.CheckedChanged += new System.EventHandler(this.chkbx_safe_CheckedChanged);
             // 
+            // btn_personalprofile
+            // 
+            this.btn_personalprofile.Location = new System.Drawing.Point(282, 415);
+            this.btn_personalprofile.Name = "btn_personalprofile";
+            this.btn_personalprofile.Size = new System.Drawing.Size(75, 23);
+            this.btn_personalprofile.TabIndex = 21;
+            this.btn_personalprofile.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btn_personalprofile);
             this.Controls.Add(this.chkbx_safe);
             this.Controls.Add(this.btn_settings);
             this.Controls.Add(this.lbl_scheme);
@@ -293,6 +303,7 @@
         private System.Windows.Forms.Button btn_settings;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.CheckBox chkbx_safe;
+        private System.Windows.Forms.Button btn_personalprofile;
     }
 }
 
